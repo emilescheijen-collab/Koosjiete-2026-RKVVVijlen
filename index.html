@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Koo-sjiete 2026 | RKVV Vijlen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero">
+  <div class="hero-overlay">
+    <div class="topbar">
+      <div class="logo-placeholder">RKVV<br>VIJLEN</div>
+      <div class="event">10 OKTOBER 2026 · SPORTPARK WEIDEKLOKJE</div>
+    </div>
+    <div class="hero-copy">
+      <p class="eyebrow">RKVV VIJLEN PRESENTEERT</p>
+      <h1>KOO-SJIETE</h1>
+      <p class="tagline">Niet gescheten is altijd mis! Kies hieronder jouw kavel(s) en win de hoofdprijs!</p>
+      <div class="prize">HOOFDPRIJS <strong>€250,-</strong></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="intro">
+    <h2>Kies jouw kavel(s)</h2>
+    <p>Iedere kavel is <strong>1 bij 2 meter</strong> groot en kost <strong>€5,-</strong>. Klik op één of meerdere beschikbare kavels.</p>
+    <div class="legend">
+      <span><i class="available"></i> Beschikbaar</span>
+      <span><i class="selected"></i> Geselecteerd</span>
+      <span><i class="sold"></i> Verkocht</span>
+    </div>
+  </section>
+
+  <section class="field-wrap">
+    <div class="field-label">ZIJLIJN VOETBALVELD</div>
+    <div class="field-scene">
+      <div class="clubhouse">KANTINE</div>
+      <div class="grid-scroll"><div id="plotGrid" class="plot-grid" aria-label="Kavelraster"></div></div>
+    </div>
+  </section>
+
+  <section class="order-card">
+    <div>
+      <span>Geselecteerd</span>
+      <strong id="count">0 kavels</strong>
+    </div>
+    <div>
+      <span>Totaal</span>
+      <strong id="total">€0,00</strong>
+    </div>
+    <button id="continueBtn" disabled>Verder met bestellen</button>
+  </section>
+
+  <section class="music">
+    <div><small>MET MUZIEK VAN</small><strong>Auf ein Neues</strong></div>
+    <div><small>EN</small><strong>D’r Sjlijp!</strong></div>
+  </section>
+
+  <section class="contact">
+    <h2>Vragen?</h2>
+    <p>Stuur een WhatsApp-bericht naar <strong>06 18 03 65 32</strong>.</p>
+  </section>
+</main>
+
+<footer>© 2026 RKVV Vijlen · Koo-sjiete</footer>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-card">
+    <button id="closeModal" class="close" aria-label="Sluiten">×</button>
+    <h2>Jouw kavels</h2>
+    <p id="selectionText"></p>
+    <p><strong id="modalTotal"></strong></p>
+    <p class="notice">De kavelkeuze werkt al. In de volgende stap koppelen we dit scherm aan Supabase en het bestelformulier, zodat kavels centraal worden gereserveerd en verkocht.</p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
