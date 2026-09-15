@@ -66,16 +66,58 @@
 
 <footer>© 2026 RKVV Vijlen · Koo-sjiete</footer>
 
-<div id="modal" class="modal" hidden>
-  <div class="modal-card">
-    <button id="closeModal" class="close" aria-label="Sluiten">×</button>
-    <h2>Jouw kavels</h2>
-    <p id="selectionText"></p>
-    <p><strong id="modalTotal"></strong></p>
-    <p class="notice">De kavelkeuze werkt al. In de volgende stap koppelen we dit scherm aan Supabase en het bestelformulier, zodat kavels centraal worden gereserveerd en verkocht.</p>
-  </div>
-</div>
+<dialog id="modal" class="modal">
+<div class="modal-card">
+<button type="button" class="close" data-close aria-label="Sluiten">×</button>
 
+<div class="modal-body">
+<h2>Jouw bestelling</h2>
+
+<p id="orderSelection"></p>
+<p><strong id="orderTotal"></strong></p>
+
+<form id="orderForm">
+<label for="naam">Naam</label>
+<input
+type="text"
+id="naam"
+name="naam"
+autocomplete="name"
+required
+>
+
+<label for="email">E-mailadres</label>
+<input
+type="email"
+id="email"
+name="email"
+autocomplete="email"
+required
+>
+
+<label for="telefoon">Telefoonnummer</label>
+<input
+type="tel"
+id="telefoon"
+name="telefoon"
+autocomplete="tel"
+required
+>
+
+<p class="reservation-note">
+Na bevestiging worden jouw kavels 15 minuten voor je gereserveerd.
+</p>
+
+<button type="submit" id="reserveBtn">
+Kavels reserveren
+</button>
+
+<p id="orderMessage" aria-live="polite"></p>
+</form>
+</div>
+</div>
+</dialog>
+  
 <script src="script.js"></script>
 </body>
 </html>
