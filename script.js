@@ -183,7 +183,6 @@ orderMessage.textContent =
 
 selected.clear();
 update();
-orderForm.reset();
 
 await loadKavels();
 
