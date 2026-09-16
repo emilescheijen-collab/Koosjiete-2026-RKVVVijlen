@@ -63,7 +63,10 @@ el.textContent = id;
 el.title = `Kavel ${id}`;
 el.type = 'button';
 
-if (kavel.status !== 'beschikbaar') {
+if (kavel.status === 'gereserveerd') {
+el.classList.add('is-reserved');
+el.disabled = true;
+} else if (kavel.status === 'verkocht') {
 el.classList.add('is-sold');
 el.disabled = true;
 } else {
