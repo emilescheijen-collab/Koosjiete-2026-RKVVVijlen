@@ -2,3 +2,30 @@
 dialog.modal:not([open]) {
 display: none;
 } 
+
+/* Statuskleuren kavels */
+.plot {
+background: #ffffff;
+}
+
+.plot.is-selected {
+background: #f2c94c !important;
+}
+
+.plot.is-reserved {
+background: #9ca3af !important;
+color: #ffffff;
+opacity: 1 !important;
+cursor: not-allowed;
+}
+
+.plot.is-sold {
+background: #d9534f !important;
+color: #ffffff;
+opacity: 1 !important;
+cursor: not-allowed;
+}
+
+.plot:disabled {
+opacity: 1;
+}
