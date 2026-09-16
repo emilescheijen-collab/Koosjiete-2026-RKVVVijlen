@@ -29,3 +29,11 @@ cursor: not-allowed;
 .plot:disabled {
 opacity: 1;
 }
+
+.legend .reserved {
+  background: #9ca3af;
+}
+
+.legend .sold {
+  background: #d9534f;
+  }
