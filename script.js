@@ -196,14 +196,29 @@ throw new Error(foutmelding);
 await response.json();
 
 orderMessage.textContent =
-'Gelukt! Jouw kavels zijn 15 minuten gereserveerd.';
+'Reservering gelukt. Je wordt doorgestuurd naar de betaling...';
 
-selected.clear();
-update();
+const paymentResponse = await fetch('/api/create-payment', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({
+kavels: [...selected]
+})
+});
 
-await loadKavels();
+const paymentData = await paymentResponse.json();
 
-reserveBtn.textContent = 'Kavels gereserveerd';
+if (!paymentResponse.ok || !paymentData.checkoutUrl) {
+throw new Error(
+paymentData.error || 'De betaling kon niet worden gestart.'
+);
+}
+
+window.location.href = paymentData.checkoutUrl;
+return;
+
 } catch (error) {
 console.error(error);
 
