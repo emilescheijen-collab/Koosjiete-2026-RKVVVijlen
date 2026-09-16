@@ -18,6 +18,23 @@ const selected = new Set();
 async function loadKavels() {
 grid.innerHTML = 'Kavels laden...';
 
+  try {
+await fetch(
+`${SUPABASE_URL}/rest/v1/rpc/ververs_verlopen_reserveringen`,
+{
+method: 'POST',
+headers: {
+apikey: SUPABASE_KEY,
+Authorization: `Bearer ${SUPABASE_KEY}`,
+'Content-Type': 'application/json'
+},
+body: '{}'
+}
+);
+} catch (error) {
+console.error('Opruimen verlopen reserveringen mislukt:', error);
+}
+
 try {
 const response = await fetch(
 `${SUPABASE_URL}/rest/v1/kavels?select=kavelnummer,status&order=id.asc`,
