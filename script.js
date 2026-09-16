@@ -193,7 +193,7 @@ console.error(error);
 throw new Error(foutmelding);
 }
 
-await response.json();
+const bestellingId = await response.json();
 
 orderMessage.textContent =
 'Reservering gelukt. Je wordt doorgestuurd naar de betaling...';
@@ -204,8 +204,10 @@ headers: {
 'Content-Type': 'application/json'
 },
 body: JSON.stringify({
-kavels: [...selected]
+kavels: [...selected],
+bestellingId: bestellingId
 })
+
 });
 
 const paymentData = await paymentResponse.json();
