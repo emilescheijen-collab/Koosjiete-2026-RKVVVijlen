@@ -4,10 +4,13 @@ return res.status(405).json({ error: 'Method not allowed' });
 }
 
 try {
-const { kavels } = req.body;
+const { kavels, bestellingId } = req.body;
 
 if (!Array.isArray(kavels) || kavels.length === 0) {
 return res.status(400).json({ error: 'Geen kavels geselecteerd.' });
+}
+if (!bestellingId) {
+return res.status(400).json({ error: 'Bestelling-ID ontbreekt.' });
 }
 
 const bedrag = (kavels.length * 5).toFixed(2);
@@ -25,7 +28,9 @@ value: bedrag
 },
 description: `Koo-sjiete RKVV Vijlen - ${kavels.length} kavel(s)`,
 redirectUrl: `${req.headers.origin}/?betaling=terug`,
+webhookUrl: `${req.headers.origin}/api/mollie-webhook`,
 metadata: {
+bestellingId: bestellingId,
 kavels: kavels
 }
 })
