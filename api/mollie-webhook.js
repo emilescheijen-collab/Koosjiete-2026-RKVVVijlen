@@ -157,6 +157,147 @@ return res
 .send('Een kavel kon niet worden bijgewerkt');
 }
 }
+// ============================================================
+// BEVESTIGINGSMAIL VERSTUREN
+// ============================================================
+
+if (process.env.RESEND_API_KEY) {
+try {
+// Probeer deze bestelling atomair te "claimen" voor de mail.
+// Alleen als bevestigingsmail_verstuurd nog false is.
+const claimResponse = await fetch(
+`${supabaseUrl}/rest/v1/bestellingen?id=eq.${encodeURIComponent(
+bestellingId
+)}&bevestigingsmail_verstuurd=eq.false&select=naam,email,totaalbedrag`,
+{
+method: 'PATCH',
+headers: {
+...supabaseHeaders,
+Prefer: 'return=representation'
+},
+body: JSON.stringify({
+bevestigingsmail_verstuurd: true
+})
+}
+);
+
+if (!claimResponse.ok) {
+throw new Error(
+`Bestelling claimen voor bevestigingsmail mislukt: ${await claimResponse.text()}`
+);
+}
+
+const geclaimdeBestellingen = await claimResponse.json();
+
+// Lege array betekent: mail was al eerder verwerkt.
+if (geclaimdeBestellingen.length > 0) {
+const bestelling = geclaimdeBestellingen[0];
+
+if (!bestelling.email) {
+console.error('Geen e-mailadres aanwezig voor bevestigingsmail');
+} else {
+const kavelNummers = koppelingen
+.map(koppeling => koppeling.kavelnummer)
+.join(', ');
+
+const bedrag = Number(bestelling.totaalbedrag).toLocaleString(
+'nl-NL',
+{
+style: 'currency',
+currency: 'EUR'
+}
+);
+
+const naam = bestelling.naam || 'beste deelnemer';
+
+const emailResponse = await fetch(
+'https://api.resend.com/emails',
+{
+method: 'POST',
+headers: {
+Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+'Content-Type': 'application/json'
+},
+body: JSON.stringify({
+from: 'Koo-sjiete RKVV Vijlen <onboarding@resend.dev>',
+to: [bestelling.email],
+subject: 'Bevestiging Koo-sjiete RKVV Vijlen',
+html: `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+<h2 style="color: #52644a;">
+Bedankt voor je bestelling!
+</h2>
+
+<p>Hallo ${naam},</p>
+
+<p>
+Je betaling voor Koo-sjiete RKVV Vijlen is succesvol ontvangen.
+De onderstaande kavel(s) zijn definitief voor je vastgelegd.
+</p>
+
+<div style="background: #f5f5f5; padding: 18px; border-radius: 10px; margin: 24px 0;">
+<p style="margin: 0 0 10px;">
+<strong>Kavel(s):</strong> ${kavelNummers}
+</p>
+
+<p style="margin: 0;">
+<strong>Totaalbedrag:</strong> ${bedrag}
+</p>
+</div>
+
+<p>
+Bewaar deze e-mail als bevestiging van je bestelling.
+</p>
+
+<p>
+Bedankt voor je deelname en veel succes!
+</p>
+
+<p>
+Groet,<br>
+<strong>RKVV Vijlen</strong>
+</p>
+</div>
+`
+})
+}
+);
+
+if (!emailResponse.ok) {
+const emailFout = await emailResponse.text();
+console.error('Resend fout:', emailFout);
+
+// Claim terugzetten zodat later opnieuw geprobeerd kan worden.
+await fetch(
+`${supabaseUrl}/rest/v1/bestellingen?id=eq.${encodeURIComponent(
+bestellingId
+)}`,
+{
+method: 'PATCH',
+headers: {
+...supabaseHeaders,
+Prefer: 'return=minimal'
+},
+body: JSON.stringify({
+bevestigingsmail_verstuurd: false
+})
+}
+);
+} else {
+console.log(
+`Bevestigingsmail verzonden naar ${bestelling.email}`
+);
+}
+}
+} else {
+console.log('Bevestigingsmail was al verwerkt');
+}
+} catch (mailError) {
+console.error('Bevestigingsmail fout:', mailError);
+}
+} else {
+console.error('RESEND_API_KEY ontbreekt');
+}
 
 console.log('Betaling succesvol verwerkt');
 return res.status(200).send('OK');
