@@ -55,9 +55,12 @@ return res.status(500).send('Bestelling-ID ontbreekt');
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY;
 
+console.log('SUPABASE_URL aanwezig:', Boolean(supabaseUrl));
+console.log('SUPABASE_SECRET_KEY aanwezig:', Boolean(supabaseSecretKey));
+
 if (!supabaseUrl || !supabaseSecretKey) {
-console.error('Supabase environment variables ontbreken');
-return res.status(500).send('Serverconfiguratie ontbreekt');
+  console.error('Supabase environment variables ontbreken');
+  return res.status(500).send('Serverconfiguratie ontbreekt');
 }
 
 const supabaseHeaders = {
