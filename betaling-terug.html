@@ -118,9 +118,6 @@ Terug naar het kaveloverzicht
 </main>
 
 <script>
-const SUPABASE_URL = 'https://qqjzhzcmuhmxbmlvvjvk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_nx8hJzfx00jVhm3aq1QEMg_Yic9gghC';
-
 const params = new URLSearchParams(window.location.search);
 const bestellingId = params.get('bestellingId');
 
@@ -133,41 +130,18 @@ function wacht(ms) {
 return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function haalBestellingOp() {
+async function haalStatusOp() {
 const response = await fetch(
-`${SUPABASE_URL}/rest/v1/bestellingen?id=eq.${encodeURIComponent(bestellingId)}&select=id,status,totaalbedrag`,
-{
-headers: {
-apikey: SUPABASE_KEY,
-Authorization: `Bearer ${SUPABASE_KEY}`
-}
-}
+`/api/payment-status?bestellingId=${encodeURIComponent(bestellingId)}`
 );
 
-if (!response.ok) {
-throw new Error('Bestelling kon niet worden gecontroleerd.');
-}
-
-const resultaten = await response.json();
-return resultaten[0];
-}
-
-async function haalKavelsOp() {
-const response = await fetch(
-`${SUPABASE_URL}/rest/v1/bestelling_kavels?bestelling_id=eq.${encodeURIComponent(bestellingId)}&select=kavelnummer&order=kavelnummer.asc`,
-{
-headers: {
-apikey: SUPABASE_KEY,
-Authorization: `Bearer ${SUPABASE_KEY}`
-}
-}
-);
+const data = await response.json();
 
 if (!response.ok) {
-return [];
+throw new Error(data.error || 'Betaalstatus kon niet worden gecontroleerd.');
 }
 
-return response.json();
+return data;
 }
 
 async function controleerBetaling() {
@@ -181,16 +155,16 @@ return;
 }
 
 try {
-let bestelling;
+let data;
 
 // De Mollie-webhook kan nét iets later klaar zijn dan de redirect.
-// Daarom controleren we enkele keren opnieuw.
-for (let poging = 0; poging < 5; poging++) {
-bestelling = await haalBestellingOp();
+// Daarom controleren we meerdere keren opnieuw.
+for (let poging = 0; poging < 6; poging++) {
+data = await haalStatusOp();
 
 if (
-bestelling?.status === 'betaald' ||
-bestelling?.status === 'verlopen'
+data.status === 'betaald' ||
+data.status === 'verlopen'
 ) {
 break;
 }
@@ -198,14 +172,7 @@ break;
 await wacht(1500);
 }
 
-if (!bestelling) {
-throw new Error('Bestelling niet gevonden.');
-}
-
-const kavels = await haalKavelsOp();
-const kavelNummers = kavels.map(k => k.kavelnummer);
-
-if (bestelling.status === 'betaald') {
+if (data.status === 'betaald') {
 title.textContent = 'Bedankt voor je bestelling!';
 title.className = 'success';
 
@@ -214,7 +181,8 @@ message.textContent =
 
 statusBox.textContent = 'Betaling geslaagd';
 statusBox.className = 'status success';
-} else if (bestelling.status === 'verlopen') {
+
+} else if (data.status === 'verlopen') {
 title.textContent = 'Betaling niet afgerond';
 title.className = 'warning';
 
@@ -223,6 +191,7 @@ message.textContent =
 
 statusBox.textContent = 'Betaling niet geslaagd';
 statusBox.className = 'status warning';
+
 } else {
 title.textContent = 'Betaling wordt verwerkt';
 title.className = 'warning';
@@ -236,12 +205,12 @@ statusBox.className = 'status warning';
 
 let detailHtml = '';
 
-if (kavelNummers.length > 0) {
-detailHtml += `<p><strong>Kavel(s):</strong> ${kavelNummers.join(', ')}</p>`;
+if (Array.isArray(data.kavels) && data.kavels.length > 0) {
+detailHtml += `<p><strong>Kavel(s):</strong> ${data.kavels.join(', ')}</p>`;
 }
 
-if (bestelling.totaalbedrag !== null) {
-const bedrag = Number(bestelling.totaalbedrag).toLocaleString(
+if (data.totaalbedrag !== null && data.totaalbedrag !== undefined) {
+const bedrag = Number(data.totaalbedrag).toLocaleString(
 'nl-NL',
 {
 style: 'currency',
