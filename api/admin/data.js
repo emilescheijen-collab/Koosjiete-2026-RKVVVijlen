@@ -155,9 +155,32 @@ kavelsPerBestelling.get(bestelling.id) || []
 ).sort((a, b) => a.localeCompare(b, 'nl'))
 }));
 
-return res.status(200).json({
-bestellingen: resultaat
+// Alle kavels ophalen voor de kavelzoeker
+const kavelsResponse = await fetch(
+`${supabaseUrl}/rest/v1/kavels?select=kavelnummer,status&order=id.asc`,
+{
+headers
+}
+);
+
+if (!kavelsResponse.ok) {
+console.error(
+'Kavels ophalen mislukt:',
+await kavelsResponse.text()
+);
+
+return res.status(500).json({
+error: 'Kavels konden niet worden opgehaald'
 });
+}
+
+const kavels = await kavelsResponse.json();
+
+return res.status(200).json({
+bestellingen: resultaat,
+kavels
+});
+
 
 } catch (error) {
 console.error('Admin data fout:', error);
