@@ -224,3 +224,40 @@ color: #35513b;
 font-weight: 800;
 text-decoration: none;
 }
+/* Contactblok duidelijker */
+.contact {
+text-align: center;
+margin-top: 34px;
+padding: 22px 16px;
+background: #ffffff;
+border-radius: 14px;
+box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.contact h2 {
+margin: 0 0 8px;
+font-size: 26px;
+color: #2f3b2f;
+}
+
+.contact p {
+margin: 0;
+font-size: 17px;
+font-weight: 600;
+}
+
+.contact strong {
+color: #35513b;
+font-size: 19px;
+}
+.field-label {
+background: #35513b;
+color: #ffffff;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 1.2px;
+text-align: center;
+padding: 10px 12px;
+margin-top: 8px;
+border-radius: 0 0 10px 10px;
+}
