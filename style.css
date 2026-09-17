@@ -113,3 +113,55 @@ padding: 7px 8px;
 font-size: 11px;
 }
 }
+/* Compactere en symmetrische artiestenkaarten */
+
+.artists {
+width: min(420px, 100%);
+max-width: none;
+margin: 22px auto 0;
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 14px;
+}
+
+.artist-card {
+width: 100%;
+border-radius: 12px;
+}
+
+.artist-card img {
+width: 100%;
+aspect-ratio: 1 / 1;
+object-fit: cover;
+}
+
+.artist-card span {
+padding: 7px 8px;
+font-size: 12px;
+}
+
+/* Zijlijn onder het raster */
+
+.field-label {
+margin: 8px 0 0;
+text-align: center;
+color: #6c746b;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 1.4px;
+}
+
+/* Mobiel */
+
+@media (max-width: 700px) {
+.artists {
+width: min(310px, 100%);
+gap: 10px;
+margin-top: 18px;
+}
+
+.artist-card span {
+font-size: 10px;
+padding: 6px;
+}
+}
