@@ -238,5 +238,17 @@ await loadKavels();
 }
 });
 
+async function refreshNaTerugkomst() {
+await loadKavels();
+
+setTimeout(() => {
 loadKavels();
+}, 1500);
+
+setTimeout(() => {
+loadKavels();
+}, 3500);
+}
+
+refreshNaTerugkomst();
 update();
