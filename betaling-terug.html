@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betaling | Koo-sjiete RKVV Vijlen</title>
+
+<style>
+* {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 24px;
+font-family: Arial, sans-serif;
+background: #f3efe6;
+color: #2f3b2f;
+}
+
+.card {
+width: 100%;
+max-width: 560px;
+background: white;
+border-radius: 20px;
+padding: 38px 28px;
+text-align: center;
+box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+.logo {
+width: 78px;
+height: 78px;
+margin: 0 auto 22px;
+border-radius: 50%;
+background: #52644a;
+color: white;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+font-size: 18px;
+}
+
+h1 {
+margin: 0 0 14px;
+font-size: 30px;
+}
+
+p {
+line-height: 1.6;
+margin: 10px 0;
+}
+
+.status {
+margin: 24px 0;
+padding: 18px;
+border-radius: 12px;
+background: #f6f6f6;
+}
+
+.details {
+margin-top: 18px;
+font-size: 15px;
+}
+
+.button {
+display: inline-block;
+margin-top: 24px;
+padding: 13px 22px;
+border-radius: 10px;
+background: #52644a;
+color: white;
+text-decoration: none;
+font-weight: bold;
+}
+
+.success {
+color: #326b3a;
+}
+
+.warning {
+color: #9a6513;
+}
+
+.error {
+color: #a43737;
+}
+</style>
+</head>
+
+<body>
+
+<main class="card">
+
+<div class="logo">RKVV</div>
+
+<h1 id="title">Betaling controleren...</h1>
+
+<p id="message">
+Een moment geduld. We controleren de status van je bestelling.
+</p>
+
+<div class="status" id="statusBox">
+Bezig met controleren...
+</div>
+
+<div class="details" id="details"></div>
+
+<a class="button" href="/">
+Terug naar het kaveloverzicht
+</a>
+
+</main>
+
+<script>
+const SUPABASE_URL = 'https://qqjzhzcmuhmxbmlvvjvk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_nx8hJzfx00jVhm3aq1QEMg_Yic9gghC';
+
+const params = new URLSearchParams(window.location.search);
+const bestellingId = params.get('bestellingId');
+
+const title = document.getElementById('title');
+const message = document.getElementById('message');
+const statusBox = document.getElementById('statusBox');
+const details = document.getElementById('details');
+
+function wacht(ms) {
+return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function haalBestellingOp() {
+const response = await fetch(
+`${SUPABASE_URL}/rest/v1/bestellingen?id=eq.${encodeURIComponent(bestellingId)}&select=id,status,totaalbedrag`,
+{
+headers: {
+apikey: SUPABASE_KEY,
+Authorization: `Bearer ${SUPABASE_KEY}`
+}
+}
+);
+
+if (!response.ok) {
+throw new Error('Bestelling kon niet worden gecontroleerd.');
+}
+
+const resultaten = await response.json();
+return resultaten[0];
+}
+
+async function haalKavelsOp() {
+const response = await fetch(
+`${SUPABASE_URL}/rest/v1/bestelling_kavels?bestelling_id=eq.${encodeURIComponent(bestellingId)}&select=kavelnummer&order=kavelnummer.asc`,
+{
+headers: {
+apikey: SUPABASE_KEY,
+Authorization: `Bearer ${SUPABASE_KEY}`
+}
+}
+);
+
+if (!response.ok) {
+return [];
+}
+
+return response.json();
+}
+
+async function controleerBetaling() {
+if (!bestellingId) {
+title.textContent = 'Bestelling niet gevonden';
+message.textContent =
+'Er ontbreekt informatie om deze betaling te controleren.';
+statusBox.textContent = 'Geen bestelling-ID ontvangen.';
+statusBox.className = 'status error';
+return;
+}
+
+try {
+let bestelling;
+
+// De Mollie-webhook kan nét iets later klaar zijn dan de redirect.
+// Daarom controleren we enkele keren opnieuw.
+for (let poging = 0; poging < 5; poging++) {
+bestelling = await haalBestellingOp();
+
+if (
+bestelling?.status === 'betaald' ||
+bestelling?.status === 'verlopen'
+) {
+break;
+}
+
+await wacht(1500);
+}
+
+if (!bestelling) {
+throw new Error('Bestelling niet gevonden.');
+}
+
+const kavels = await haalKavelsOp();
+const kavelNummers = kavels.map(k => k.kavelnummer);
+
+if (bestelling.status === 'betaald') {
+title.textContent = 'Bedankt voor je bestelling!';
+title.className = 'success';
+
+message.textContent =
+'Je betaling is succesvol ontvangen. Je kavels zijn definitief vastgelegd.';
+
+statusBox.textContent = 'Betaling geslaagd';
+statusBox.className = 'status success';
+} else if (bestelling.status === 'verlopen') {
+title.textContent = 'Betaling niet afgerond';
+title.className = 'warning';
+
+message.textContent =
+'De betaling is niet voltooid. De gereserveerde kavels zijn weer vrijgegeven.';
+
+statusBox.textContent = 'Betaling niet geslaagd';
+statusBox.className = 'status warning';
+} else {
+title.textContent = 'Betaling wordt verwerkt';
+title.className = 'warning';
+
+message.textContent =
+'We hebben nog geen definitieve betaalstatus ontvangen. Controleer het kaveloverzicht over enkele ogenblikken opnieuw.';
+
+statusBox.textContent = 'Status nog in behandeling';
+statusBox.className = 'status warning';
+}
+
+let detailHtml = '';
+
+if (kavelNummers.length > 0) {
+detailHtml += `<p><strong>Kavel(s):</strong> ${kavelNummers.join(', ')}</p>`;
+}
+
+if (bestelling.totaalbedrag !== null) {
+const bedrag = Number(bestelling.totaalbedrag).toLocaleString(
+'nl-NL',
+{
+style: 'currency',
+currency: 'EUR'
+}
+);
+
+detailHtml += `<p><strong>Totaal:</strong> ${bedrag}</p>`;
+}
+
+details.innerHTML = detailHtml;
+
+} catch (error) {
+console.error(error);
+
+title.textContent = 'Controle niet gelukt';
+title.className = 'error';
+
+message.textContent =
+'We konden de betaalstatus op dit moment niet controleren.';
+
+statusBox.textContent =
+'Ga terug naar het kaveloverzicht of probeer het later opnieuw.';
+statusBox.className = 'status error';
+}
+}
+
+controleerBetaling();
+</script>
+
+</body>
+</html>
