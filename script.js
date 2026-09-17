@@ -52,6 +52,20 @@ throw new Error(`Supabase fout: ${response.status}`);
 
 const kavels = await response.json();
 
+const beschikbareKavels = new Set(
+kavels
+.filter((kavel) => kavel.status === 'beschikbaar')
+.map((kavel) => kavel.kavelnummer)
+);
+
+for (const kavelnummer of [...selected]) {
+if (!beschikbareKavels.has(kavelnummer)) {
+selected.delete(kavelnummer);
+}
+}
+
+update();
+
 grid.innerHTML = '';
 
 kavels.forEach((kavel) => {
