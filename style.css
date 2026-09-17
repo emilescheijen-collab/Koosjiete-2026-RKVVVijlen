@@ -37,3 +37,79 @@ opacity: 1;
 .legend .sold {
   background: #d9534f;
   }
+/* =========================================================
+HERO MET FOTO, CLUBLOGO EN ARTIESTEN
+========================================================= */
+
+.hero {
+position: relative;
+background:
+linear-gradient(
+rgba(28, 42, 29, 0.72),
+rgba(28, 42, 29, 0.72)
+),
+url("assets/bergdorpje.jpg") center center / cover no-repeat;
+color: white;
+}
+
+.club-logo {
+width: 110px;
+height: auto;
+display: block;
+filter: drop-shadow(0 4px 10px rgba(0,0,0,0.28));
+}
+
+.artists {
+display: flex;
+gap: 14px;
+margin-top: 30px;
+max-width: 540px;
+}
+
+.artist-card {
+flex: 1;
+overflow: hidden;
+border-radius: 14px;
+background: rgba(255,255,255,0.95);
+box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+}
+
+.artist-card img {
+display: block;
+width: 100%;
+aspect-ratio: 1 / 1;
+object-fit: cover;
+}
+
+.artist-card span {
+display: block;
+padding: 9px 12px;
+color: #354534;
+font-size: 13px;
+font-weight: 700;
+text-align: center;
+}
+
+@media (max-width: 700px) {
+.club-logo {
+width: 78px;
+}
+
+.hero {
+background-position: center center;
+}
+
+.artists {
+gap: 8px;
+margin-top: 22px;
+}
+
+.artist-card {
+border-radius: 10px;
+}
+
+.artist-card span {
+padding: 7px 8px;
+font-size: 11px;
+}
+}
