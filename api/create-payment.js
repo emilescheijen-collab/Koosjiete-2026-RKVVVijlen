@@ -27,7 +27,7 @@ currency: 'EUR',
 value: bedrag
 },
 description: `Koo-sjiete RKVV Vijlen - ${kavels.length} kavel(s)`,
-redirectUrl: `https://koosjiete-2026-rkvv-vijlen.vercel.app/?betaling=terug`,
+redirectUrl: `https://koosjiete-2026-rkvv-vijlen.vercel.app/betaling-terug.html?bestellingId=${encodeURIComponent(bestellingId)}`,
 webhookUrl: `https://koosjiete-2026-rkvv-vijlen.vercel.app/api/mollie-webhook`,
 metadata: {
 bestellingId: bestellingId,
