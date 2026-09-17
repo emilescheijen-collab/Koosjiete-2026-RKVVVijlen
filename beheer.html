@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beheer | Koo-sjiete RKVV Vijlen</title>
+
+<style>
+* {
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #f4f1e9;
+color: #2f3b2f;
+}
+
+.page {
+max-width: 1200px;
+margin: 0 auto;
+padding: 24px;
+}
+
+.card {
+background: white;
+border-radius: 16px;
+padding: 24px;
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+margin-top: 0;
+}
+
+input,
+button {
+font: inherit;
+}
+
+input {
+width: 100%;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 8px;
+margin: 10px 0;
+}
+
+button {
+border: 0;
+border-radius: 8px;
+padding: 12px 18px;
+background: #52644a;
+color: white;
+font-weight: bold;
+cursor: pointer;
+}
+
+button:disabled {
+opacity: 0.6;
+cursor: default;
+}
+
+.error {
+color: #a43737;
+margin-top: 12px;
+}
+
+.hidden {
+display: none;
+}
+
+.toolbar {
+display: flex;
+gap: 12px;
+flex-wrap: wrap;
+margin-bottom: 20px;
+}
+
+.toolbar input {
+max-width: 320px;
+margin: 0;
+}
+
+.stats {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+margin-bottom: 20px;
+}
+
+.stat {
+background: #f7f7f7;
+border-radius: 12px;
+padding: 16px;
+}
+
+.stat strong {
+display: block;
+font-size: 24px;
+margin-top: 6px;
+}
+
+.table-wrap {
+overflow-x: auto;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+min-width: 900px;
+}
+
+th,
+td {
+text-align: left;
+padding: 12px;
+border-bottom: 1px solid #e2e2e2;
+vertical-align: top;
+}
+
+th {
+background: #f5f5f5;
+}
+
+.status {
+display: inline-block;
+padding: 5px 9px;
+border-radius: 999px;
+font-size: 13px;
+font-weight: bold;
+}
+
+.status-betaald {
+background: #e3f4e6;
+color: #2d6a36;
+}
+
+.status-gereserveerd {
+background: #eeeeee;
+color: #555;
+}
+
+.status-verlopen {
+background: #f7e8e8;
+color: #9a3434;
+}
+
+@media (max-width: 700px) {
+.page {
+padding: 14px;
+}
+
+.stats {
+grid-template-columns: 1fr;
+}
+
+.card {
+padding: 18px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<section id="loginCard" class="card">
+<h1>Beheer Koo-sjiete</h1>
+
+<p>
+Log in om de bestellingen te bekijken.
+</p>
+
+<input
+id="password"
+type="password"
+placeholder="Beheerwachtwoord"
+autocomplete="current-password"
+>
+
+<button id="loginBtn">
+Inloggen
+</button>
+
+<div id="loginError" class="error"></div>
+</section>
+
+<section id="beheerCard" class="card hidden">
+
+<h1>Bestellingen</h1>
+
+<div class="stats">
+<div class="stat">
+Betaald
+<strong id="statBetaald">0</strong>
+</div>
+
+<div class="stat">
+Gereserveerd
+<strong id="statGereserveerd">0</strong>
+</div>
+
+<div class="stat">
+Verlopen
+<strong id="statVerlopen">0</strong>
+</div>
+</div>
+
+<div class="toolbar">
+<input
+id="searchInput"
+type="search"
+placeholder="Zoek op naam, e-mail, telefoon of kavel..."
+>
+
+<button id="refreshBtn">
+Vernieuwen
+</button>
+</div>
+
+<div id="beheerError" class="error"></div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Datum</th>
+<th>Naam</th>
+<th>Contact</th>
+<th>Kavels</th>
+<th>Bedrag</th>
+<th>Status</th>
+<th>Mail</th>
+</tr>
+</thead>
+
+<tbody id="ordersBody"></tbody>
+</table>
+</div>
+
+</section>
+
+</div>
+
+<script>
+const loginCard = document.getElementById('loginCard');
+const beheerCard = document.getElementById('beheerCard');
+
+const passwordInput = document.getElementById('password');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
+
+const beheerError = document.getElementById('beheerError');
+const ordersBody = document.getElementById('ordersBody');
+const searchInput = document.getElementById('searchInput');
+const refreshBtn = document.getElementById('refreshBtn');
+
+const statBetaald = document.getElementById('statBetaald');
+const statGereserveerd = document.getElementById('statGereserveerd');
+const statVerlopen = document.getElementById('statVerlopen');
+
+let bestellingen = [];
+
+function escapeHtml(value) {
+return String(value ?? '')
+.replaceAll('&', '&amp;')
+.replaceAll('<', '&lt;')
+.replaceAll('>', '&gt;')
+.replaceAll('"', '&quot;')
+.replaceAll("'", '&#039;');
+}
+
+function formatBedrag(value) {
+return Number(value || 0).toLocaleString('nl-NL', {
+style: 'currency',
+currency: 'EUR'
+});
+}
+
+function formatDatum(value) {
+if (!value) {
+return '-';
+}
+
+return new Date(value).toLocaleString('nl-NL', {
+dateStyle: 'short',
+timeStyle: 'short'
+});
+}
+
+function statusClass(status) {
+if (status === 'betaald') {
+return 'status-betaald';
+}
+
+if (status === 'verlopen') {
+return 'status-verlopen';
+}
+
+return 'status-gereserveerd';
+}
+
+function updateStats() {
+statBetaald.textContent =
+bestellingen.filter(b => b.status === 'betaald').length;
+
+statGereserveerd.textContent =
+bestellingen.filter(b => b.status === 'gereserveerd').length;
+
+statVerlopen.textContent =
+bestellingen.filter(b => b.status === 'verlopen').length;
+}
+
+function renderBestellingen() {
+const zoekterm = searchInput.value
+.trim()
+.toLowerCase();
+
+const gefilterd = bestellingen.filter(bestelling => {
+const tekst = [
+bestelling.naam,
+bestelling.email,
+bestelling.telefoon,
+bestelling.status,
+...(bestelling.kavels || [])
+]
+.join(' ')
+.toLowerCase();
+
+return tekst.includes(zoekterm);
+});
+
+ordersBody.innerHTML = '';
+
+if (gefilterd.length === 0) {
+ordersBody.innerHTML = `
+<tr>
+<td colspan="7">Geen bestellingen gevonden.</td>
+</tr>
+`;
+return;
+}
+
+for (const bestelling of gefilterd) {
+const row = document.createElement('tr');
+
+row.innerHTML = `
+<td>${escapeHtml(formatDatum(bestelling.created_at))}</td>
+
+<td>
+<strong>${escapeHtml(bestelling.naam || '-')}</strong>
+</td>
+
+<td>
+${escapeHtml(bestelling.email || '-')}
+<br>
+${escapeHtml(bestelling.telefoon || '-')}
+</td>
+
+<td>
+${escapeHtml((bestelling.kavels || []).join(', ') || '-')}
+</td>
+
+<td>
+${escapeHtml(formatBedrag(bestelling.totaalbedrag))}
+</td>
+
+<td>
+<span class="status ${statusClass(bestelling.status)}">
+${escapeHtml(bestelling.status)}
+</span>
+</td>
+
+<td>
+${
+bestelling.bevestigingsmail_verstuurd
+? 'Verstuurd'
+: 'Niet verstuurd'
+}
+</td>
+`;
+
+ordersBody.appendChild(row);
+}
+}
+
+async function loadAdminData() {
+beheerError.textContent = '';
+refreshBtn.disabled = true;
+
+try {
+const response = await fetch('/api/admin-data', {
+credentials: 'same-origin'
+});
+
+if (response.status === 401) {
+loginCard.classList.remove('hidden');
+beheerCard.classList.add('hidden');
+return;
+}
+
+const data = await response.json();
+
+if (!response.ok) {
+throw new Error(
+data.error || 'Beheerdata kon niet worden geladen.'
+);
+}
+
+bestellingen = data.bestellingen || [];
+
+loginCard.classList.add('hidden');
+beheerCard.classList.remove('hidden');
+
+updateStats();
+renderBestellingen();
+
+} catch (error) {
+console.error(error);
+beheerError.textContent = error.message;
+} finally {
+refreshBtn.disabled = false;
+}
+}
+
+async function login() {
+loginError.textContent = '';
+
+const wachtwoord = passwordInput.value;
+
+if (!wachtwoord) {
+loginError.textContent = 'Vul het wachtwoord in.';
+return;
+}
+
+loginBtn.disabled = true;
+loginBtn.textContent = 'Bezig...';
+
+try {
+const response = await fetch('/api/admin-login', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+credentials: 'same-origin',
+body: JSON.stringify({
+wachtwoord
+})
+});
+
+const data = await response.json();
+
+if (!response.ok) {
+throw new Error(
+data.error || 'Inloggen is mislukt.'
+);
+}
+
+passwordInput.value = '';
+await loadAdminData();
+
+} catch (error) {
+loginError.textContent = error.message;
+} finally {
+loginBtn.disabled = false;
+loginBtn.textContent = 'Inloggen';
+}
+}
+
+loginBtn.addEventListener('click', login);
+
+passwordInput.addEventListener('keydown', event => {
+if (event.key === 'Enter') {
+login();
+}
+});
+
+searchInput.addEventListener('input', renderBestellingen);
+
+refreshBtn.addEventListener('click', loadAdminData);
+
+// Als er nog een geldige sessiecookie is,
+// verschijnt het beheer direct zonder opnieuw inloggen.
+loadAdminData();
+</script>
+
+</body>
+</html>
