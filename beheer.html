@@ -44,7 +44,6 @@ width: 100%;
 padding: 12px;
 border: 1px solid #ccc;
 border-radius: 8px;
-margin: 10px 0;
 }
 
 button {
@@ -57,9 +56,8 @@ font-weight: bold;
 cursor: pointer;
 }
 
-button:disabled {
-opacity: 0.6;
-cursor: default;
+.hidden {
+display: none;
 }
 
 .error {
@@ -67,27 +65,11 @@ color: #a43737;
 margin-top: 12px;
 }
 
-.hidden {
-display: none;
-}
-
-.toolbar {
-display: flex;
-gap: 12px;
-flex-wrap: wrap;
-margin-bottom: 20px;
-}
-
-.toolbar input {
-max-width: 320px;
-margin: 0;
-}
-
 .stats {
 display: grid;
 grid-template-columns: repeat(3, 1fr);
 gap: 12px;
-margin-bottom: 20px;
+margin-bottom: 24px;
 }
 
 .stat {
@@ -98,18 +80,45 @@ padding: 16px;
 
 .stat strong {
 display: block;
-font-size: 24px;
+font-size: 26px;
 margin-top: 6px;
+}
+
+.search-box {
+margin: 24px 0;
+padding: 18px;
+background: #f7f7f7;
+border-radius: 12px;
+}
+
+.search-row {
+display: flex;
+gap: 10px;
+flex-wrap: wrap;
+}
+
+.search-row input {
+flex: 1;
+min-width: 180px;
+}
+
+.result {
+margin-top: 14px;
+padding: 14px;
+border-radius: 10px;
+background: white;
+border: 1px solid #ddd;
 }
 
 .table-wrap {
 overflow-x: auto;
+margin-top: 18px;
 }
 
 table {
 width: 100%;
 border-collapse: collapse;
-min-width: 900px;
+min-width: 800px;
 }
 
 th,
@@ -137,16 +146,6 @@ background: #e3f4e6;
 color: #2d6a36;
 }
 
-.status-gereserveerd {
-background: #eeeeee;
-color: #555;
-}
-
-.status-verlopen {
-background: #f7e8e8;
-color: #9a3434;
-}
-
 @media (max-width: 700px) {
 .page {
 padding: 14px;
@@ -170,9 +169,7 @@ padding: 18px;
 <section id="loginCard" class="card">
 <h1>Beheer Koo-sjiete</h1>
 
-<p>
-Log in om de bestellingen te bekijken.
-</p>
+<p>Log in om de betaalde bestellingen te bekijken.</p>
 
 <input
 id="password"
@@ -181,45 +178,53 @@ placeholder="Beheerwachtwoord"
 autocomplete="current-password"
 >
 
-<button id="loginBtn">
-Inloggen
-</button>
+<br><br>
+
+<button id="loginBtn">Inloggen</button>
 
 <div id="loginError" class="error"></div>
 </section>
 
 <section id="beheerCard" class="card hidden">
 
-<h1>Bestellingen</h1>
+<h1>Beheer Koo-sjiete</h1>
 
 <div class="stats">
 <div class="stat">
-Betaald
-<strong id="statBetaald">0</strong>
+Betaalde bestellingen
+<strong id="statBestellingen">0</strong>
 </div>
 
 <div class="stat">
-Gereserveerd
-<strong id="statGereserveerd">0</strong>
+Verkochte kavels
+<strong id="statVerkocht">0</strong>
 </div>
 
 <div class="stat">
-Verlopen
-<strong id="statVerlopen">0</strong>
+Totale opbrengst
+<strong id="statOpbrengst">€ 0,00</strong>
 </div>
 </div>
 
-<div class="toolbar">
+<div class="search-box">
+<h2>Kavel zoeken</h2>
+
+<div class="search-row">
 <input
-id="searchInput"
+id="kavelSearch"
 type="search"
-placeholder="Zoek op naam, e-mail, telefoon of kavel..."
+placeholder="Bijvoorbeeld A20"
 >
 
-<button id="refreshBtn">
-Vernieuwen
+<button id="kavelSearchBtn">
+Zoeken
 </button>
 </div>
+
+<div id="kavelResult"></div>
+</div>
+
+<h2>Betaalde bestellingen</h2>
 
 <div id="beheerError" class="error"></div>
 
@@ -233,7 +238,6 @@ Vernieuwen
 <th>Kavels</th>
 <th>Bedrag</th>
 <th>Status</th>
-<th>Mail</th>
 </tr>
 </thead>
 
@@ -255,14 +259,17 @@ const loginError = document.getElementById('loginError');
 
 const beheerError = document.getElementById('beheerError');
 const ordersBody = document.getElementById('ordersBody');
-const searchInput = document.getElementById('searchInput');
-const refreshBtn = document.getElementById('refreshBtn');
 
-const statBetaald = document.getElementById('statBetaald');
-const statGereserveerd = document.getElementById('statGereserveerd');
-const statVerlopen = document.getElementById('statVerlopen');
+const statBestellingen = document.getElementById('statBestellingen');
+const statVerkocht = document.getElementById('statVerkocht');
+const statOpbrengst = document.getElementById('statOpbrengst');
+
+const kavelSearch = document.getElementById('kavelSearch');
+const kavelSearchBtn = document.getElementById('kavelSearchBtn');
+const kavelResult = document.getElementById('kavelResult');
 
 let bestellingen = [];
+let kavels = [];
 
 function escapeHtml(value) {
 return String(value ?? '')
@@ -291,60 +298,47 @@ timeStyle: 'short'
 });
 }
 
-function statusClass(status) {
-if (status === 'betaald') {
-return 'status-betaald';
-}
-
-if (status === 'verlopen') {
-return 'status-verlopen';
-}
-
-return 'status-gereserveerd';
+function betaaldeBestellingen() {
+return bestellingen.filter(
+bestelling => bestelling.status === 'betaald'
+);
 }
 
 function updateStats() {
-statBetaald.textContent =
-bestellingen.filter(b => b.status === 'betaald').length;
+const betaald = betaaldeBestellingen();
 
-statGereserveerd.textContent =
-bestellingen.filter(b => b.status === 'gereserveerd').length;
+const verkochtAantal = betaald.reduce(
+(totaal, bestelling) =>
+totaal + (bestelling.kavels || []).length,
+0
+);
 
-statVerlopen.textContent =
-bestellingen.filter(b => b.status === 'verlopen').length;
+const opbrengst = betaald.reduce(
+(totaal, bestelling) =>
+totaal + Number(bestelling.totaalbedrag || 0),
+0
+);
+
+statBestellingen.textContent = betaald.length;
+statVerkocht.textContent = verkochtAantal;
+statOpbrengst.textContent = formatBedrag(opbrengst);
 }
 
 function renderBestellingen() {
-const zoekterm = searchInput.value
-.trim()
-.toLowerCase();
-
-const gefilterd = bestellingen.filter(bestelling => {
-const tekst = [
-bestelling.naam,
-bestelling.email,
-bestelling.telefoon,
-bestelling.status,
-...(bestelling.kavels || [])
-]
-.join(' ')
-.toLowerCase();
-
-return tekst.includes(zoekterm);
-});
+const betaald = betaaldeBestellingen();
 
 ordersBody.innerHTML = '';
 
-if (gefilterd.length === 0) {
+if (betaald.length === 0) {
 ordersBody.innerHTML = `
 <tr>
-<td colspan="7">Geen bestellingen gevonden.</td>
+<td colspan="6">Nog geen betaalde bestellingen.</td>
 </tr>
 `;
 return;
 }
 
-for (const bestelling of gefilterd) {
+for (const bestelling of betaald) {
 const row = document.createElement('tr');
 
 row.innerHTML = `
@@ -369,17 +363,9 @@ ${escapeHtml(formatBedrag(bestelling.totaalbedrag))}
 </td>
 
 <td>
-<span class="status ${statusClass(bestelling.status)}">
-${escapeHtml(bestelling.status)}
+<span class="status status-betaald">
+betaald
 </span>
-</td>
-
-<td>
-${
-bestelling.bevestigingsmail_verstuurd
-? 'Verstuurd'
-: 'Niet verstuurd'
-}
 </td>
 `;
 
@@ -387,9 +373,76 @@ ordersBody.appendChild(row);
 }
 }
 
+function zoekKavel() {
+const zoekterm = kavelSearch.value
+.trim()
+.toUpperCase();
+
+kavelResult.innerHTML = '';
+
+if (!zoekterm) {
+return;
+}
+
+const kavel = kavels.find(
+item => item.kavelnummer.toUpperCase() === zoekterm
+);
+
+if (!kavel) {
+kavelResult.innerHTML = `
+<div class="result">
+Kavel <strong>${escapeHtml(zoekterm)}</strong> bestaat niet.
+</div>
+`;
+return;
+}
+
+const bestelling = betaaldeBestellingen().find(
+bestelling =>
+(bestelling.kavels || []).includes(kavel.kavelnummer)
+);
+
+if (bestelling) {
+kavelResult.innerHTML = `
+<div class="result">
+<strong>${escapeHtml(kavel.kavelnummer)}</strong>
+is verkocht aan
+<strong>${escapeHtml(bestelling.naam || '-')}</strong>.
+
+<br><br>
+
+E-mail:
+${escapeHtml(bestelling.email || '-')}
+
+<br>
+
+Telefoon:
+${escapeHtml(bestelling.telefoon || '-')}
+</div>
+`;
+return;
+}
+
+if (kavel.status === 'gereserveerd') {
+kavelResult.innerHTML = `
+<div class="result">
+<strong>${escapeHtml(kavel.kavelnummer)}</strong>
+is momenteel gereserveerd, maar nog niet betaald.
+</div>
+`;
+return;
+}
+
+kavelResult.innerHTML = `
+<div class="result">
+<strong>${escapeHtml(kavel.kavelnummer)}</strong>
+is beschikbaar.
+</div>
+`;
+}
+
 async function loadAdminData() {
 beheerError.textContent = '';
-refreshBtn.disabled = true;
 
 try {
 const response = await fetch('/api/admin/data', {
@@ -411,6 +464,7 @@ data.error || 'Beheerdata kon niet worden geladen.'
 }
 
 bestellingen = data.bestellingen || [];
+kavels = data.kavels || [];
 
 loginCard.classList.add('hidden');
 beheerCard.classList.remove('hidden');
@@ -421,8 +475,6 @@ renderBestellingen();
 } catch (error) {
 console.error(error);
 beheerError.textContent = error.message;
-} finally {
-refreshBtn.disabled = false;
 }
 }
 
@@ -478,12 +530,14 @@ login();
 }
 });
 
-searchInput.addEventListener('input', renderBestellingen);
+kavelSearchBtn.addEventListener('click', zoekKavel);
 
-refreshBtn.addEventListener('click', loadAdminData);
+kavelSearch.addEventListener('keydown', event => {
+if (event.key === 'Enter') {
+zoekKavel();
+}
+});
 
-// Als er nog een geldige sessiecookie is,
-// verschijnt het beheer direct zonder opnieuw inloggen.
 loadAdminData();
 </script>
 
