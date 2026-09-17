@@ -129,9 +129,10 @@ reserveBtn.textContent = 'Kavels reserveren';
 modal.showModal();
 });
 
-modal.addEventListener('click', (event) => {
+modal.addEventListener('click', async (event) => {
 if (event.target.matches('[data-close]')) {
 modal.close();
+await loadKavels();
 }
 });
 
