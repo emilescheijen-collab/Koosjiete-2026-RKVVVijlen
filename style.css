@@ -615,20 +615,20 @@ font-size: 22px;
 }
 
 .cow-tag-wrap {
-width: 270px;
-min-height: 155px;
+width: 360px;
+min-height: 205px;
 }
 
 .cow-head {
-font-size: 100px;
+font-size: 145px;
 }
 
 .live-teller.ear-tag {
-left: 162px;
-top: 38px;
+left: 220px;
+top: 52px;
 
-width: 112px;
-min-height: 120px;
+width: 118px;
+min-height: 125px;
 
 padding:
 23px
@@ -637,7 +637,7 @@ padding:
 }
 
 .ear-tag-number {
-font-size: 40px;
+font-size: 43px;
 }
 
 .ear-tag-small {
