@@ -297,7 +297,7 @@ gap: 4px;
 }
 
 /* =========================================================
-CENTRAAL BLOK: HOOFDPRIJS + KOE + LIVE OORMERK
+HOOFDPRIJS + KOE + OORMERK
 ========================================================= */
 
 .hero-cow-section {
@@ -305,360 +305,6 @@ width: 100%;
 display: flex;
 flex-direction: column;
 align-items: center;
-justify-content: center;
-text-align: center;
-
-margin: 26px auto 18px;
-}
-
-
-/* =========================================================
-HOOFDPRIJS
-========================================================= */
-
-.prize-pill {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-gap: 10px;
-
-background: rgba(255, 255, 255, 0.95);
-color: #111;
-
-padding: 11px 24px;
-margin-bottom: 16px;
-
-border-radius: 999px;
-
-font-size: 18px;
-font-weight: 800;
-line-height: 1;
-
-box-shadow:
-0 4px 12px rgba(0, 0, 0, 0.22),
-inset 0 1px 0 rgba(255,255,255,0.8);
-}
-
-.prize-pill strong {
-font-size: 27px;
-font-weight: 900;
-}
-
-
-/* =========================================================
-KOE + OORMERK
-========================================================= */
-
-.cow-tag-wrap {
-position: relative;
-
-display: inline-flex;
-align-items: center;
-justify-content: center;
-
-width: 310px;
-min-height: 175px;
-
-margin: 0 auto;
-}
-
-
-/* KOE */
-
-.cow-head {
-position: relative;
-z-index: 1;
-
-font-size: 118px;
-line-height: 1;
-
-transform-origin: center center;
-
-filter:
-drop-shadow(0 5px 7px rgba(0, 0, 0, 0.20));
-}
-
-
-/* =========================================================
-GEEL VEE-OORMERK
-========================================================= */
-
-.live-teller.ear-tag {
-position: absolute;
-z-index: 3;
-
-/*
-Oormerk hangt rechts aan het oor.
-Deze twee waarden bepalen de positie.
-*/
-left: 188px;
-top: 41px;
-
-width: 126px;
-min-height: 132px;
-
-box-sizing: border-box;
-
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-
-padding:
-25px
-12px
-12px;
-
-text-decoration: none;
-
-color: #111;
-background:
-linear-gradient(
-145deg,
-#ffe52d 0%,
-#ffd900 45%,
-#f5c900 100%
-);
-
-border: 2px solid rgba(70, 55, 0, 0.35);
-
-/*
-Vorm van een vee-oormerk:
-smalle bovenzijde / bredere onderzijde.
-*/
-clip-path: polygon(
-30% 0%,
-70% 0%,
-86% 13%,
-100% 23%,
-93% 88%,
-74% 100%,
-22% 100%,
-4% 87%,
-0% 26%,
-14% 13%
-);
-
-transform:
-rotate(11deg);
-
-transform-origin:
-24px 18px;
-
-box-shadow:
-0 7px 12px rgba(0, 0, 0, 0.28);
-
-cursor: pointer;
-
-transition:
-transform 0.18s ease,
-filter 0.18s ease;
-}
-
-
-/* =========================================================
-BEVESTIGING AAN HET OOR
-========================================================= */
-
-/*
-Klein geel verbindingsstuk van oor naar oormerk.
-*/
-
-.live-teller.ear-tag::before {
-content: "";
-
-position: absolute;
-
-left: 4px;
-top: 17px;
-
-width: 26px;
-height: 10px;
-
-background: #f4cb00;
-
-border-radius: 8px;
-
-transform:
-translateX(-14px)
-rotate(-10deg);
-
-z-index: -1;
-}
-
-
-/*
-Donker bevestigingspunt / pen.
-*/
-
-.live-teller.ear-tag::after {
-content: "";
-
-position: absolute;
-
-left: 17px;
-top: 14px;
-
-width: 17px;
-height: 17px;
-
-border-radius: 50%;
-
-background:
-radial-gradient(
-circle at 35% 35%,
-#f7f7f7 0 16%,
-#777 18% 41%,
-#303030 44% 100%
-);
-
-border: 2px solid #5f5200;
-
-box-shadow:
-0 1px 2px rgba(0, 0, 0, 0.35);
-
-z-index: 5;
-}
-
-
-/* =========================================================
-TEKST OP OORMERK
-========================================================= */
-
-.ear-tag-small {
-display: block;
-
-font-size: 14px;
-font-weight: 900;
-line-height: 1;
-
-letter-spacing: 0.7px;
-
-text-align: center;
-}
-
-.ear-tag-number {
-display: block;
-
-margin: 3px 0 2px;
-
-font-size: 46px;
-font-weight: 950;
-line-height: 0.95;
-
-letter-spacing: -2px;
-
-text-align: center;
-}
-
-.ear-tag-bottom {
-font-size: 13px;
-line-height: 1.05;
-}
-
-
-/* =========================================================
-HOVER
-========================================================= */
-
-.live-teller.ear-tag:hover {
-transform:
-rotate(8deg)
-scale(1.035);
-
-filter: brightness(1.04);
-}
-
-
-/* =========================================================
-SUBTIELE BEWEGING
-========================================================= */
-
-.live-teller.ear-tag {
-animation:
-ear-tag-swing 4.5s ease-in-out infinite;
-}
-
-@keyframes ear-tag-swing {
-
-0%,
-100% {
-transform: rotate(11deg);
-}
-
-50% {
-transform: rotate(8deg);
-}
-}
-
-
-/* =========================================================
-MOBIEL
-========================================================= */
-
-@media (max-width: 700px) {
-
-.hero-cow-section {
-margin-top: 20px;
-}
-
-.prize-pill {
-padding: 10px 19px;
-
-font-size: 15px;
-
-margin-bottom: 15px;
-}
-
-.prize-pill strong {
-font-size: 22px;
-}
-
-.cow-tag-wrap {
-width: 360px;
-min-height: 205px;
-}
-
-.cow-head {
-font-size: 145px;
-}
-
-.live-teller.ear-tag {
-left: 220px;
-top: 52px;
-
-width: 118px;
-min-height: 125px;
-
-padding:
-23px
-10px
-11px;
-}
-
-.ear-tag-number {
-font-size: 43px;
-}
-
-.ear-tag-small {
-font-size: 12px;
-}
-
-.ear-tag-bottom {
-font-size: 11px;
-}
-}
-
-/* =========================================================
-KOO-SJIETE - GECENTREERDE KOE + ECHT VEE-OORMERK
-========================================================= */
-
-.hero-cow-section {
-width: 100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
 text-align: center;
 margin: 26px auto 18px;
 }
@@ -666,13 +312,13 @@ margin: 26px auto 18px;
 
 /* HOOFDPRIJS */
 
-.hero-cow-section .prize-pill {
+.prize-pill {
 display: inline-flex;
 align-items: center;
 justify-content: center;
 gap: 10px;
 
-background: rgba(255,255,255,.95);
+background: #fff;
 color: #111;
 
 padding: 11px 24px;
@@ -682,35 +328,35 @@ border-radius: 999px;
 
 font-size: 18px;
 font-weight: 800;
-line-height: 1;
 
 box-shadow: 0 4px 12px rgba(0,0,0,.22);
 }
 
-.hero-cow-section .prize-pill strong {
+.prize-pill strong {
 font-size: 27px;
 font-weight: 900;
 }
 
 
-/* =========================================================
-KOE
-========================================================= */
+/* KOE + OORMERK CONTAINER */
 
-.hero-cow-section .cow-tag-wrap {
+.cow-tag-wrap {
 position: relative;
 
 width: 360px;
 height: 205px;
 
+margin: 0 auto;
+
 display: flex;
 justify-content: center;
 align-items: flex-start;
-
-margin: 0 auto;
 }
 
-.hero-cow-section .cow-head {
+
+/* KOE */
+
+.cow-head {
 position: relative;
 z-index: 1;
 
@@ -726,141 +372,134 @@ filter: drop-shadow(
 
 
 /* =========================================================
-COMPLETE OORMERK-CONTAINER
+OORMERK
 ========================================================= */
 
-.hero-cow-section .live-teller.ear-tag {
+.live-teller.ear-tag {
 position: absolute;
 
-/*
-Hiermee plaatsen we het bevestigingspunt
-daadwerkelijk tegen het rechteroor.
-*/
-left: 211px;
-top: 49px;
+left: 214px;
+top: 51px;
 
-width: 122px;
-height: 137px;
+width: 118px;
+height: 132px;
 
-z-index: 4;
-isolation; isolate
+z-index: 5;
+
+box-sizing: border-box;
 
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
 
-box-sizing: border-box;
-
-padding: 28px 11px 12px;
-
-background: transparent;
-border: 0;
+padding: 27px 10px 11px;
 
 color: #111;
 text-decoration: none;
 
-transform: rotate(10deg);
-transform-origin: 2px 18px;
-
-cursor: pointer;
-
 /*
 BELANGRIJK:
-géén clip-path op deze container.
-Daardoor blijft de bevestiging zichtbaar.
+het gele label staat nu gewoon OP het element zelf.
+Geen pseudo-element en geen negatieve z-index meer.
 */
-clip-path: none;
-
-box-shadow: none;
-
-transition:
-transform .2s ease,
-filter .2s ease;
-}
-
-
-/* =========================================================
-GELE BODY VAN HET OORMERK
-========================================================= */
-
-.hero-cow-section .live-teller.ear-tag::before {
-content: "";
-
-position: absolute;
-inset: 0;
-
-z-index: 0;
-
 background:
 linear-gradient(
 145deg,
-#ffe733 0%,
-#ffdc05 52%,
-#f4c800 100%
+#ffe72d 0%,
+#ffda00 58%,
+#efc200 100%
 );
 
-border: 2px solid rgba(75,60,0,.38);
+border: 2px solid rgba(80,65,0,.38);
 
 /*
-Vorm zoals een echt vee-oormerk:
-smalle hals bovenaan,
-brede body,
-afgeschuinde onderhoeken.
+Geeft het label een oormerkachtige vorm
+zonder clip-path.
 */
-clip-path: polygon(
-18% 0%,
-52% 0%,
-63% 8%,
-89% 13%,
-100% 27%,
-94% 88%,
-78% 100%,
-23% 100%,
-6% 88%,
-0% 28%,
-9% 12%
-);
+border-radius:
+13px
+22px
+20px
+15px;
 
-filter:
-drop-shadow(0 6px 6px rgba(0,0,0,.28));
+box-shadow:
+0 7px 12px rgba(0,0,0,.30);
+
+transform: rotate(10deg);
+transform-origin: 7px 13px;
+
+cursor: pointer;
 }
 
 
 /* =========================================================
-VERBINDINGSSTUK VAN OOR NAAR OORMERK
+GELE HALS / VERBINDING NAAR HET OOR
 ========================================================= */
 
-.hero-cow-section .live-teller.ear-tag::after {
+.live-teller.ear-tag::before {
 content: "";
 
 position: absolute;
 
-left: -24px;
-top: 13px;
+left: -28px;
+top: 8px;
 
-width: 37px;
-height: 12px;
-
-z-index: 1;
+width: 43px;
+height: 22px;
 
 background:
 linear-gradient(
 to bottom,
-#ffe227,
-#e8be00
+#ffe72d,
+#f0c500
 );
 
-border: 2px solid rgba(75,60,0,.30);
+border: 2px solid rgba(80,65,0,.34);
 border-right: 0;
 
 border-radius:
-8px 2px 2px 8px;
+12px
+4px
+4px
+12px;
 
-transform: rotate(-5deg);
+z-index: 1;
+
+transform: rotate(-7deg);
 
 box-shadow:
-0 2px 3px rgba(0,0,0,.18);
+0 2px 3px rgba(0,0,0,.20);
+}
+
+
+/* smallere tweede verbinding richting oor */
+
+.live-teller.ear-tag::after {
+content: "";
+
+position: absolute;
+
+left: -42px;
+top: 12px;
+
+width: 22px;
+height: 13px;
+
+background: #ffd714;
+
+border: 2px solid rgba(80,65,0,.30);
+border-right: 0;
+
+border-radius:
+8px
+2px
+2px
+8px;
+
+z-index: 0;
+
+transform: rotate(-9deg);
 }
 
 
@@ -868,31 +507,29 @@ box-shadow:
 BEVESTIGINGSDOP
 ========================================================= */
 
-.hero-cow-section .ear-tag-hole {
+.ear-tag-hole {
 position: absolute;
 
-left: 7px;
-top: 8px;
+left: 5px;
+top: 7px;
 
-width: 21px;
-height: 21px;
-
-z-index: 6;
+width: 22px;
+height: 22px;
 
 border-radius: 50%;
 
+z-index: 5;
+
 background:
 radial-gradient(
-circle at 37% 34%,
-#fafafa 0%,
-#fafafa 13%,
-#9b9b9b 16%,
-#777 39%,
-#343434 43%,
-#222 100%
+circle at 35% 32%,
+#fafafa 0 12%,
+#999 15% 36%,
+#555 39% 58%,
+#252525 61% 100%
 );
 
-border: 2px solid #5e5200;
+border: 2px solid #665600;
 
 box-shadow:
 0 2px 3px rgba(0,0,0,.35);
@@ -900,12 +537,12 @@ box-shadow:
 
 
 /* =========================================================
-TEKST
+TEKST OORMERK
 ========================================================= */
 
-.hero-cow-section .ear-tag-small {
+.ear-tag-small {
 position: relative;
-z-index: 3;
+z-index: 6;
 
 display: block;
 
@@ -918,13 +555,13 @@ letter-spacing: .7px;
 text-align: center;
 }
 
-.hero-cow-section .ear-tag-number {
+.ear-tag-number {
 position: relative;
-z-index: 3;
+z-index: 6;
 
 display: block;
 
-margin: 3px 0 3px;
+margin: 4px 0 2px;
 
 font-size: 43px;
 font-weight: 900;
@@ -935,21 +572,19 @@ letter-spacing: -2px;
 text-align: center;
 }
 
-.hero-cow-section .ear-tag-bottom {
+.ear-tag-bottom {
 font-size: 13px;
 line-height: 1.05;
 }
 
 
-/* =========================================================
-SUBTIELE BEWEGING
-========================================================= */
+/* SUBTIELE BEWEGING */
 
-.hero-cow-section .live-teller.ear-tag {
-animation: realistic-tag-swing 4.5s ease-in-out infinite;
+.live-teller.ear-tag {
+animation: tagSwing 4.5s ease-in-out infinite;
 }
 
-@keyframes realistic-tag-swing {
+@keyframes tagSwing {
 0%,
 100% {
 transform: rotate(10deg);
@@ -960,14 +595,9 @@ transform: rotate(7deg);
 }
 }
 
-.hero-cow-section .live-teller.ear-tag:hover {
+.live-teller.ear-tag:hover {
 animation: none;
-
-transform:
-rotate(7deg)
-scale(1.03);
-
-filter: brightness(1.04);
+transform: rotate(7deg) scale(1.03);
 }
 
 
@@ -977,65 +607,62 @@ MOBIEL
 
 @media (max-width: 700px) {
 
-.hero-cow-section {
-margin-top: 20px;
-}
-
-.hero-cow-section .prize-pill {
+.prize-pill {
 padding: 10px 19px;
 margin-bottom: 15px;
-
 font-size: 15px;
 }
 
-.hero-cow-section .prize-pill strong {
+.prize-pill strong {
 font-size: 22px;
 }
 
-.hero-cow-section .cow-tag-wrap {
+.cow-tag-wrap {
 width: 300px;
 height: 175px;
 }
 
-.hero-cow-section .cow-head {
+.cow-head {
 font-size: 118px;
 }
 
-.hero-cow-section .live-teller.ear-tag {
-left: 176px;
-top: 42px;
+.live-teller.ear-tag {
+left: 178px;
+top: 43px;
 
-width: 106px;
-height: 120px;
+width: 104px;
+height: 116px;
 
-padding: 25px 9px 10px;
+padding: 24px 9px 9px;
 }
 
-.hero-cow-section .live-teller.ear-tag::after {
-left: -20px;
-top: 12px;
-
-width: 31px;
-height: 10px;
+.live-teller.ear-tag::before {
+left: -24px;
+width: 38px;
+height: 19px;
 }
 
-.hero-cow-section .ear-tag-hole {
-left: 6px;
-top: 7px;
+.live-teller.ear-tag::after {
+left: -36px;
+width: 20px;
+height: 11px;
+}
 
+.ear-tag-hole {
 width: 18px;
 height: 18px;
 }
 
-.hero-cow-section .ear-tag-number {
+.ear-tag-number {
 font-size: 36px;
 }
 
-.hero-cow-section .ear-tag-small {
+.ear-tag-small {
 font-size: 12px;
 }
 
-.hero-cow-section .ear-tag-bottom {
+.ear-tag-bottom {
 font-size: 11px;
 }
 }
+
