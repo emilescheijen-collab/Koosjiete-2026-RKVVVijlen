@@ -295,3 +295,63 @@ flex-direction: column;
 gap: 4px;
 }
 }
+.live-teller.ear-tag {
+display: inline-flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 4px;
+
+margin-top: 14px;
+padding: 18px 24px 16px 30px;
+min-width: 155px;
+
+background: #ffd84d;
+color: #1f1f1f;
+text-decoration: none;
+
+border: 3px solid #1f1f1f;
+border-radius: 22px 18px 20px 34px;
+
+position: relative;
+box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
+
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.live-teller.ear-tag::before {
+content: "";
+position: absolute;
+left: 12px;
+top: 50%;
+transform: translateY(-50%);
+
+width: 15px;
+height: 15px;
+
+background: #fff7d6;
+border: 3px solid #1f1f1f;
+border-radius: 50%;
+}
+
+.live-teller.ear-tag:hover {
+transform: translateY(-2px) rotate(-1deg);
+box-shadow: 0 7px 16px rgba(0, 0, 0, 0.26);
+}
+
+.ear-tag-small {
+font-size: 12px;
+line-height: 1.1;
+letter-spacing: 0.7px;
+font-weight: 800;
+}
+
+.ear-tag-number {
+font-size: 42px;
+line-height: 1;
+font-weight: 900;
+}
+
+html {
+scroll-behavior: smooth;
+}
