@@ -303,6 +303,7 @@ justify-content: center;
 gap: 4px;
 
 margin-top: 14px;
+margin-left: 72px;
 padding: 18px 24px 16px 30px;
 min-width: 155px;
 
@@ -314,9 +315,14 @@ border: 3px solid #1f1f1f;
 border-radius: 22px 18px 20px 34px;
 
 position: relative;
+overflow: visible;
+transform-origin: left center;
+
 box-shadow: 0 5px 12px rgba(0, 0, 0, 0.22);
 
+animation: tag-swing 3.2s ease-in-out infinite;
 transition: transform 0.2s ease, box-shadow 0.2s ease;
+z-index: 2;
 }
 
 .live-teller.ear-tag::before {
@@ -332,10 +338,26 @@ height: 15px;
 background: #fff7d6;
 border: 3px solid #1f1f1f;
 border-radius: 50%;
+z-index: 3;
+}
+
+.live-teller.ear-tag::after {
+content: "🐮";
+position: absolute;
+left: -82px;
+top: 50%;
+transform: translateY(-54%) rotate(-3deg);
+
+font-size: 76px;
+line-height: 1;
+
+filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.22));
+animation: cow-bob 2.8s ease-in-out infinite;
+z-index: 1;
 }
 
 .live-teller.ear-tag:hover {
-transform: translateY(-2px) rotate(-1deg);
+transform: translateY(-2px) rotate(-1deg) scale(1.02);
 box-shadow: 0 7px 16px rgba(0, 0, 0, 0.26);
 }
 
@@ -350,6 +372,28 @@ font-weight: 800;
 font-size: 42px;
 line-height: 1;
 font-weight: 900;
+}
+
+@keyframes cow-bob {
+0%, 100% {
+transform: translateY(-54%) rotate(-3deg);
+}
+50% {
+transform: translateY(-58%) rotate(2deg);
+}
+}
+
+@keyframes tag-swing {
+0%, 100% {
+transform: rotate(0deg);
+}
+50% {
+transform: rotate(1.5deg);
+}
+}
+
+html {
+scroll-behavior: smooth;
 }
 
 html {
