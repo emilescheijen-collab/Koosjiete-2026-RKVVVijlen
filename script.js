@@ -58,6 +58,12 @@ kavels
 .map((kavel) => kavel.kavelnummer)
 );
 
+const availableCountEl = document.getElementById('available-count');
+
+if (availableCountEl) {
+availableCountEl.textContent = beschikbareKavels.size;
+}
+
 for (const kavelnummer of [...selected]) {
 if (!beschikbareKavels.has(kavelnummer)) {
 selected.delete(kavelnummer);
