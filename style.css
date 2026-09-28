@@ -378,11 +378,11 @@ OORMERK
 .live-teller.ear-tag {
 position: absolute;
 
-left: 214px;
-top: 51px;
+left: 206px;
+top: 46px;
 
-width: 118px;
-height: 132px;
+width: 112px;
+height: 126px;
 
 z-index: 5;
 
@@ -393,16 +393,11 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 
-padding: 27px 10px 11px;
+padding: 25px 10px 10px;
 
 color: #111;
 text-decoration: none;
 
-/*
-BELANGRIJK:
-het gele label staat nu gewoon OP het element zelf.
-Geen pseudo-element en geen negatieve z-index meer.
-*/
 background:
 linear-gradient(
 145deg,
@@ -413,21 +408,16 @@ linear-gradient(
 
 border: 2px solid rgba(80,65,0,.38);
 
-/*
-Geeft het label een oormerkachtige vorm
-zonder clip-path.
-*/
+/* natuurlijkere vorm van een echt oormerk */
 border-radius:
-13px
-22px
-20px
-15px;
+10px 22px 20px 12px /
+12px 18px 24px 16px;
 
 box-shadow:
 0 7px 12px rgba(0,0,0,.30);
 
-transform: rotate(10deg);
-transform-origin: 7px 13px;
+transform: rotate(14deg);
+transform-origin: 8px 14px;
 
 cursor: pointer;
 }
@@ -442,11 +432,11 @@ content: "";
 
 position: absolute;
 
-left: -28px;
-top: 8px;
+left: -24px;
+top: 10px;
 
-width: 43px;
-height: 22px;
+width: 36px;
+height: 18px;
 
 background:
 linear-gradient(
@@ -459,17 +449,14 @@ border: 2px solid rgba(80,65,0,.34);
 border-right: 0;
 
 border-radius:
-12px
-4px
-4px
-12px;
+11px 4px 4px 11px;
 
 z-index: 1;
 
 transform: rotate(-7deg);
 
 box-shadow:
-0 2px 3px rgba(0,0,0,.20);
+0 2px 3px rgba(0,0,0,.18);
 }
 
 
@@ -480,11 +467,11 @@ content: "";
 
 position: absolute;
 
-left: -42px;
-top: 12px;
+left: -37px;
+top: 13px;
 
-width: 22px;
-height: 13px;
+width: 15px;
+height: 10px;
 
 background: #ffd714;
 
@@ -492,15 +479,13 @@ border: 2px solid rgba(80,65,0,.30);
 border-right: 0;
 
 border-radius:
-8px
-2px
-2px
-8px;
+7px 2px 2px 7px;
 
 z-index: 0;
 
 transform: rotate(-9deg);
 }
+
 
 
 /* =========================================================
@@ -511,10 +496,10 @@ BEVESTIGINGSDOP
 position: absolute;
 
 left: 5px;
-top: 7px;
+top: 6px;
 
-width: 22px;
-height: 22px;
+width: 20px;
+height: 20px;
 
 border-radius: 50%;
 
@@ -627,30 +612,37 @@ font-size: 118px;
 }
 
 .live-teller.ear-tag {
-left: 178px;
-top: 43px;
+left: 171px;
+top: 39px;
 
-width: 104px;
-height: 116px;
+width: 98px;
+height: 110px;
 
-padding: 24px 9px 9px;
+padding: 22px 8px 8px;
 }
 
 .live-teller.ear-tag::before {
-left: -24px;
-width: 38px;
-height: 19px;
+left: -21px;
+top: 9px;
+
+width: 31px;
+height: 16px;
 }
 
 .live-teller.ear-tag::after {
-left: -36px;
-width: 20px;
-height: 11px;
+left: -31px;
+top: 12px;
+
+width: 13px;
+height: 9px;
 }
 
 .ear-tag-hole {
-width: 18px;
-height: 18px;
+left: 4px;
+top: 5px;
+
+width: 17px;
+height: 17px;
 }
 
 .ear-tag-number {
