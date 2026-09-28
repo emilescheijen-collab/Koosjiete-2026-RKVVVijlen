@@ -378,11 +378,12 @@ OORMERK
 .live-teller.ear-tag {
 position: absolute;
 
-left: 206px;
-top: 46px;
+/* verder naar rechts, richting rechteroor */
+left: 236px;
+top: 50px;
 
-width: 112px;
-height: 126px;
+width: 106px;
+height: 122px;
 
 z-index: 5;
 
@@ -393,10 +394,30 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 
-padding: 25px 10px 10px;
+padding: 26px 9px 10px;
 
 color: #111;
 text-decoration: none;
+
+/* body wordt door ::before getekend */
+background: transparent;
+border: 0;
+
+transform: rotate(11deg);
+transform-origin: 4px 15px;
+
+cursor: pointer;
+}
+
+
+/* daadwerkelijke gele body */
+.live-teller.ear-tag::before {
+content: "";
+
+position: absolute;
+inset: 0;
+
+z-index: 0;
 
 background:
 linear-gradient(
@@ -406,104 +427,71 @@ linear-gradient(
 #efc200 100%
 );
 
-border: 2px solid rgba(80,65,0,.38);
-
-/* natuurlijkere vorm van een echt oormerk */
-border-radius:
-10px 22px 20px 12px /
-12px 18px 24px 16px;
-
-box-shadow:
-0 7px 12px rgba(0,0,0,.30);
-
-transform: rotate(14deg);
-transform-origin: 8px 14px;
-
-cursor: pointer;
-}
-
-
-/* =========================================================
-GELE HALS / VERBINDING NAAR HET OOR
-========================================================= */
-
-.live-teller.ear-tag::before {
-content: "";
-
-position: absolute;
-
-left: -24px;
-top: 10px;
-
-width: 36px;
-height: 18px;
-
-background:
-linear-gradient(
-to bottom,
-#ffe72d,
-#f0c500
+/*
+meer typische vorm van een vee-oormerk:
+smaller boven, breder onder
+*/
+clip-path: polygon(
+25% 0%,
+72% 0%,
+88% 12%,
+100% 28%,
+92% 88%,
+74% 100%,
+22% 100%,
+5% 88%,
+0% 28%,
+12% 12%
 );
 
-border: 2px solid rgba(80,65,0,.34);
-border-right: 0;
-
-border-radius:
-11px 4px 4px 11px;
-
-z-index: 1;
-
-transform: rotate(-7deg);
-
-box-shadow:
-0 2px 3px rgba(0,0,0,.18);
+filter:
+drop-shadow(0 6px 5px rgba(0,0,0,.28));
 }
 
 
-/* smallere tweede verbinding richting oor */
-
+/* gele verbinding van oor naar oormerk */
 .live-teller.ear-tag::after {
 content: "";
 
 position: absolute;
 
-left: -37px;
-top: 13px;
+left: -33px;
+top: 10px;
 
-width: 15px;
-height: 10px;
+width: 42px;
+height: 15px;
 
-background: #ffd714;
+z-index: 1;
 
-border: 2px solid rgba(80,65,0,.30);
-border-right: 0;
+background:
+linear-gradient(
+to bottom,
+#ffe72d,
+#efc500
+);
 
-border-radius:
-7px 2px 2px 7px;
+border-radius: 9px 3px 3px 9px;
 
-z-index: 0;
+transform: rotate(-8deg);
 
-transform: rotate(-9deg);
+box-shadow:
+0 1px 2px rgba(0,0,0,.18);
 }
 
 
-
-/* =========================================================
-BEVESTIGINGSDOP
-========================================================= */
-
+/* metalen/kunststof bevestigingsdop */
 .ear-tag-hole {
 position: absolute;
 
 left: 5px;
-top: 6px;
+top: 5px;
 
-width: 20px;
-height: 20px;
+width: 19px;
+height: 19px;
+
+z-index: 4;
 
 border-radius: 50%;
-
-z-index: 5;
 
 background:
 radial-gradient(
@@ -519,7 +507,6 @@ border: 2px solid #665600;
 box-shadow:
 0 2px 3px rgba(0,0,0,.35);
 }
-
 
 /* =========================================================
 TEKST OORMERK
