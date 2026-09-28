@@ -648,3 +648,393 @@ font-size: 12px;
 font-size: 11px;
 }
 }
+
+/* =========================================================
+KOO-SJIETE - GECENTREERDE KOE + ECHT VEE-OORMERK
+========================================================= */
+
+.hero-cow-section {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+margin: 26px auto 18px;
+}
+
+
+/* HOOFDPRIJS */
+
+.hero-cow-section .prize-pill {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+
+background: rgba(255,255,255,.95);
+color: #111;
+
+padding: 11px 24px;
+margin-bottom: 18px;
+
+border-radius: 999px;
+
+font-size: 18px;
+font-weight: 800;
+line-height: 1;
+
+box-shadow: 0 4px 12px rgba(0,0,0,.22);
+}
+
+.hero-cow-section .prize-pill strong {
+font-size: 27px;
+font-weight: 900;
+}
+
+
+/* =========================================================
+KOE
+========================================================= */
+
+.hero-cow-section .cow-tag-wrap {
+position: relative;
+
+width: 360px;
+height: 205px;
+
+display: flex;
+justify-content: center;
+align-items: flex-start;
+
+margin: 0 auto;
+}
+
+.hero-cow-section .cow-head {
+position: relative;
+z-index: 1;
+
+font-size: 145px;
+line-height: 1;
+
+margin-top: 8px;
+
+filter: drop-shadow(
+0 5px 7px rgba(0,0,0,.20)
+);
+}
+
+
+/* =========================================================
+COMPLETE OORMERK-CONTAINER
+========================================================= */
+
+.hero-cow-section .live-teller.ear-tag {
+position: absolute;
+
+/*
+Hiermee plaatsen we het bevestigingspunt
+daadwerkelijk tegen het rechteroor.
+*/
+left: 211px;
+top: 49px;
+
+width: 122px;
+height: 137px;
+
+z-index: 4;
+
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+box-sizing: border-box;
+
+padding: 28px 11px 12px;
+
+background: transparent;
+border: 0;
+
+color: #111;
+text-decoration: none;
+
+transform: rotate(10deg);
+transform-origin: 2px 18px;
+
+cursor: pointer;
+
+/*
+BELANGRIJK:
+géén clip-path op deze container.
+Daardoor blijft de bevestiging zichtbaar.
+*/
+clip-path: none;
+
+box-shadow: none;
+
+transition:
+transform .2s ease,
+filter .2s ease;
+}
+
+
+/* =========================================================
+GELE BODY VAN HET OORMERK
+========================================================= */
+
+.hero-cow-section .live-teller.ear-tag::before {
+content: "";
+
+position: absolute;
+inset: 0;
+
+z-index: -1;
+
+background:
+linear-gradient(
+145deg,
+#ffe733 0%,
+#ffdc05 52%,
+#f4c800 100%
+);
+
+border: 2px solid rgba(75,60,0,.38);
+
+/*
+Vorm zoals een echt vee-oormerk:
+smalle hals bovenaan,
+brede body,
+afgeschuinde onderhoeken.
+*/
+clip-path: polygon(
+18% 0%,
+52% 0%,
+63% 8%,
+89% 13%,
+100% 27%,
+94% 88%,
+78% 100%,
+23% 100%,
+6% 88%,
+0% 28%,
+9% 12%
+);
+
+filter:
+drop-shadow(0 6px 6px rgba(0,0,0,.28));
+}
+
+
+/* =========================================================
+VERBINDINGSSTUK VAN OOR NAAR OORMERK
+========================================================= */
+
+.hero-cow-section .live-teller.ear-tag::after {
+content: "";
+
+position: absolute;
+
+left: -24px;
+top: 13px;
+
+width: 37px;
+height: 12px;
+
+z-index: -2;
+
+background:
+linear-gradient(
+to bottom,
+#ffe227,
+#e8be00
+);
+
+border: 2px solid rgba(75,60,0,.30);
+border-right: 0;
+
+border-radius:
+8px 2px 2px 8px;
+
+transform: rotate(-5deg);
+
+box-shadow:
+0 2px 3px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+BEVESTIGINGSDOP
+========================================================= */
+
+.hero-cow-section .ear-tag-hole {
+position: absolute;
+
+left: 7px;
+top: 8px;
+
+width: 21px;
+height: 21px;
+
+z-index: 6;
+
+border-radius: 50%;
+
+background:
+radial-gradient(
+circle at 37% 34%,
+#fafafa 0%,
+#fafafa 13%,
+#9b9b9b 16%,
+#777 39%,
+#343434 43%,
+#222 100%
+);
+
+border: 2px solid #5e5200;
+
+box-shadow:
+0 2px 3px rgba(0,0,0,.35);
+}
+
+
+/* =========================================================
+TEKST
+========================================================= */
+
+.hero-cow-section .ear-tag-small {
+position: relative;
+z-index: 3;
+
+display: block;
+
+font-size: 14px;
+font-weight: 900;
+line-height: 1;
+
+letter-spacing: .7px;
+
+text-align: center;
+}
+
+.hero-cow-section .ear-tag-number {
+position: relative;
+z-index: 3;
+
+display: block;
+
+margin: 3px 0 3px;
+
+font-size: 43px;
+font-weight: 900;
+line-height: .9;
+
+letter-spacing: -2px;
+
+text-align: center;
+}
+
+.hero-cow-section .ear-tag-bottom {
+font-size: 13px;
+line-height: 1.05;
+}
+
+
+/* =========================================================
+SUBTIELE BEWEGING
+========================================================= */
+
+.hero-cow-section .live-teller.ear-tag {
+animation: realistic-tag-swing 4.5s ease-in-out infinite;
+}
+
+@keyframes realistic-tag-swing {
+0%,
+100% {
+transform: rotate(10deg);
+}
+
+50% {
+transform: rotate(7deg);
+}
+}
+
+.hero-cow-section .live-teller.ear-tag:hover {
+animation: none;
+
+transform:
+rotate(7deg)
+scale(1.03);
+
+filter: brightness(1.04);
+}
+
+
+/* =========================================================
+MOBIEL
+========================================================= */
+
+@media (max-width: 700px) {
+
+.hero-cow-section {
+margin-top: 20px;
+}
+
+.hero-cow-section .prize-pill {
+padding: 10px 19px;
+margin-bottom: 15px;
+
+font-size: 15px;
+}
+
+.hero-cow-section .prize-pill strong {
+font-size: 22px;
+}
+
+.hero-cow-section .cow-tag-wrap {
+width: 300px;
+height: 175px;
+}
+
+.hero-cow-section .cow-head {
+font-size: 118px;
+}
+
+.hero-cow-section .live-teller.ear-tag {
+left: 176px;
+top: 42px;
+
+width: 106px;
+height: 120px;
+
+padding: 25px 9px 10px;
+}
+
+.hero-cow-section .live-teller.ear-tag::after {
+left: -20px;
+top: 12px;
+
+width: 31px;
+height: 10px;
+}
+
+.hero-cow-section .ear-tag-hole {
+left: 6px;
+top: 7px;
+
+width: 18px;
+height: 18px;
+}
+
+.hero-cow-section .ear-tag-number {
+font-size: 36px;
+}
+
+.hero-cow-section .ear-tag-small {
+font-size: 12px;
+}
+
+.hero-cow-section .ear-tag-bottom {
+font-size: 11px;
+}
+}
