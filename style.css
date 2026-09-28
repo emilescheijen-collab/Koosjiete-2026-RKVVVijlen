@@ -298,26 +298,32 @@ gap: 4px;
 .cow-tag-wrap {
 position: relative;
 display: inline-block;
-margin-top: 12px;
-width: 330px;
-height: 150px;
+width: 360px;
+height: 175px;
+margin-top: 10px;
 }
 
 .cow-head {
 position: absolute;
 left: 0;
-top: 18px;
-font-size: 120px;
-line-height: 1;
+top: 10px;
+width: 175px;
+height: 175px;
 z-index: 1;
-filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
 animation: cow-bob 3.2s ease-in-out infinite;
+filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
+}
+
+.cow-svg {
+width: 100%;
+height: 100%;
+display: block;
 }
 
 .live-teller.ear-tag {
 position: absolute;
-left: 118px;
-top: 26px;
+left: 132px;
+top: 34px;
 
 display: inline-flex;
 flex-direction: column;
@@ -325,28 +331,36 @@ align-items: center;
 justify-content: center;
 gap: 4px;
 
-width: 190px;
-min-height: 118px;
-padding: 16px 18px 16px 24px;
+width: 186px;
+min-height: 122px;
+padding: 16px 18px 16px 28px;
 
 background: linear-gradient(180deg, #ffd91a 0%, #f2c300 100%);
 color: #1f1f1f;
 text-decoration: none;
 
 border: 3px solid #1f1f1f;
+border-radius: 14px 18px 28px 26px;
 
-/* asymmetrische vorm zoals veeoormerk */
-border-radius: 18px 24px 26px 18px;
+clip-path: polygon(
+10% 0%,
+90% 0%,
+100% 12%,
+97% 88%,
+82% 100%,
+16% 100%,
+3% 88%,
+0% 14%
+);
 
-/* schuin hangend */
 transform: rotate(10deg);
-transform-origin: top left;
+transform-origin: 8% 22%;
 
 box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
 transition: transform 0.2s ease, box-shadow 0.2s ease;
 z-index: 3;
 
-animation: tag-swing 3.4s ease-in-out infinite;
+animation: tag-swing 3.5s ease-in-out infinite;
 }
 
 /* gaatje in het oormerk */
@@ -354,7 +368,7 @@ animation: tag-swing 3.4s ease-in-out infinite;
 content: "";
 position: absolute;
 left: 16px;
-top: 42px;
+top: 27px;
 width: 18px;
 height: 18px;
 background: #fff8d8;
@@ -363,19 +377,20 @@ border-radius: 50%;
 z-index: 5;
 }
 
-/* verbindingsstrip tussen oor en oormerk */
+/* bevestigingsstuk richting rechteroor */
 .live-teller.ear-tag::after {
 content: "";
 position: absolute;
 left: -26px;
-top: 34px;
+top: 24px;
 width: 34px;
-height: 10px;
+height: 12px;
 background: #f2c300;
 border: 3px solid #1f1f1f;
 border-right: none;
 border-radius: 10px 0 0 10px;
-transform: rotate(-18deg);
+transform: rotate(-14deg);
+transform-origin: right center;
 z-index: 2;
 }
 
@@ -419,3 +434,4 @@ transform: rotate(7deg);
 html {
 scroll-behavior: smooth;
 }
+
